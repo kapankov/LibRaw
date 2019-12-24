@@ -309,19 +309,7 @@ void LibRaw::parse_ciff(int offset, int length, int depth)
     }
     else if (type == 0x00b4)
     {
-      imCanon.ColorSpace = get2();
-      switch (imCanon.ColorSpace)
-      {
-      case 1:
-        imgdata.color.MakernoteColorSpace = LIBRAW_COLORSPACE_sRGB;
-        break;
-      case 2:
-        imgdata.color.MakernoteColorSpace = LIBRAW_COLORSPACE_AdobeRGB;
-        break;
-      default:
-        imgdata.color.MakernoteColorSpace = LIBRAW_COLORSPACE_Unknown;
-        break;
-      }
+      imCommon.ColorSpace = get2();
     }
 
 #ifdef LOCALTIME

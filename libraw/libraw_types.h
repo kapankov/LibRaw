@@ -317,7 +317,6 @@ typedef unsigned long long UINT64;
     short MakernotesFlip;
     short SRAWQuality;
     unsigned wbi;
-    short ColorSpace;
   } libraw_canon_makernotes_t;
 
   typedef struct
@@ -487,7 +486,6 @@ typedef unsigned long long UINT64;
     libraw_sensor_highspeed_crop_t SensorHighSpeedCrop;
     ushort SensorWidth;
     ushort SensorHeight;
-    short ColorSpace;
   } libraw_nikon_makernotes_t;
 
   typedef struct
@@ -692,7 +690,7 @@ typedef unsigned long long UINT64;
                       7    Never seen
                       8    Name unknown
                       */
-    short MakernoteColorSpace;
+    ushort ExifColorSpace; // from ExifIFD.ColorSpace + InteropIndex, see enum LibRaw_colorspaces
   } libraw_colordata_t;
 
   typedef struct
@@ -745,6 +743,7 @@ typedef unsigned long long UINT64;
     float exifCameraElevationAngle;
     float real_ISO;
     float exifExposureIndex;
+    ushort ColorSpace; // see enum LibRaw_colorspaces
   } libraw_metadata_common_t;
 
   typedef struct
