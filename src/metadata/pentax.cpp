@@ -273,10 +273,12 @@ void LibRaw::parsePentaxMakernotes(int base, unsigned tag, unsigned type,
   {
     imgdata.shootinginfo.MeteringMode = get2();
   }
-  else if (tag == 0x001b) {
+  else if (tag == 0x001b)
+  {
     cam_mul[2] = get2() / 256.0;
   }
-  else if (tag == 0x001c) {
+  else if (tag == 0x001c)
+  {
     cam_mul[0] = get2() / 256.0;
   }
   else if (tag == 0x001d)
@@ -292,6 +294,10 @@ void LibRaw::parsePentaxMakernotes(int base, unsigned tag, unsigned type,
       imPentax.DriveMode[c] = uc;
     }
     imgdata.shootinginfo.DriveMode = imPentax.DriveMode[0];
+  }
+  else if (tag == 0x0037)
+  { // ColorSpace
+    imCommon.ColorSpace = get2()+1;
   }
   else if (tag == 0x0038)
   {
@@ -317,7 +323,8 @@ void LibRaw::parsePentaxMakernotes(int base, unsigned tag, unsigned type,
     if (type == 9)
       imgdata.makernotes.common.FlashEC = getreal(type) / 256.0f;
     else
-      imgdata.makernotes.common.FlashEC = (float)((signed short)fgetc(ifp)) / 6.0f;
+      imgdata.makernotes.common.FlashEC =
+          (float)((signed short)fgetc(ifp)) / 6.0f;
   }
   else if (tag == 0x005c)
   {
@@ -331,8 +338,7 @@ void LibRaw::parsePentaxMakernotes(int base, unsigned tag, unsigned type,
   else if ((tag == 0x007e) && (dng_writer == nonDNG))
   {
     imgdata.color.linear_max[0] = imgdata.color.linear_max[1] =
-        imgdata.color.linear_max[2] = imgdata.color.linear_max[3] =
-            get4();
+        imgdata.color.linear_max[2] = imgdata.color.linear_max[3] = get4();
   }
   else if (tag == 0x0080)
   {
@@ -354,11 +360,13 @@ void LibRaw::parsePentaxMakernotes(int base, unsigned tag, unsigned type,
     }
   }
 
-  else if ((tag == 0x0200) && (dng_writer == nonDNG)) { // Pentax black level
+  else if ((tag == 0x0200) && (dng_writer == nonDNG))
+  { // Pentax black level
     FORC4 cblack[c ^ c >> 1] = get2();
   }
 
-  else if ((tag == 0x0201) && (dng_writer == nonDNG)) { // Pentax As Shot WB
+  else if ((tag == 0x0201) && (dng_writer == nonDNG))
+  { // Pentax As Shot WB
     FORC4 cam_mul[c ^ (c >> 1)] = get2();
   }
 
@@ -386,7 +394,8 @@ void LibRaw::parsePentaxMakernotes(int base, unsigned tag, unsigned type,
         get2();
   }
 
-  else if ((tag == 0x0220) && (dng_writer == nonDNG)) {
+  else if ((tag == 0x0220) && (dng_writer == nonDNG))
+  {
     meta_offset = ftell(ifp);
   }
 
@@ -513,14 +522,15 @@ void LibRaw::parseRicohMakernotes(int base, unsigned tag, unsigned type,
     }
     fseek(ifp, 6, SEEK_CUR);
     fseek(ifp, get4(), SEEK_SET);
-    for (int i=0; i<4; i++) {
+    for (int i = 0; i < 4; i++)
+    {
       stread(buffer, 16, ifp);
       if ((buffer[0] == 'S') && (buffer[1] == 'I') && (buffer[2] == 'D'))
-			  memcpy(imgdata.shootinginfo.BodySerial, buffer+4, 12);
+        memcpy(imgdata.shootinginfo.BodySerial, buffer + 4, 12);
       else if ((buffer[0] == 'R') && (buffer[1] == 'L'))
-			  ilm.LensID = buffer[2] - '0';
+        ilm.LensID = buffer[2] - '0';
       else if ((buffer[0] == 'L') && (buffer[1] == 'I') && (buffer[2] == 'D'))
-			  memcpy(imgdata.lens.LensSerial, buffer+4, 12);
+        memcpy(imgdata.lens.LensSerial, buffer + 4, 12);
     }
   }
 }

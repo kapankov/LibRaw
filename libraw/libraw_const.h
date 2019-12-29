@@ -545,7 +545,9 @@ enum LibRaw_colorspaces
 {
   LIBRAW_COLORSPACE_Unknown = 0,
   LIBRAW_COLORSPACE_sRGB = 1,
-  LIBRAW_COLORSPACE_AdobeRGB = 2
+  LIBRAW_COLORSPACE_AdobeRGB = 2,
+  LIBRAW_COLORSPACE_WideGamutRGB = 3,
+  LIBRAW_COLORSPACE_ProPhotoRGB = 4
 };
 
 #endif

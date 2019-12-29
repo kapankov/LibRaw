@@ -26,11 +26,12 @@ void LibRaw::setOlympusBodyFeatures(unsigned long long id)
 
     if ((id == 0x4434303430ULL) || // E-1
         (id == 0x4434303431ULL) || // E-330
-        ((id >= 0x5330303033ULL) && (id <= 0x5330303138ULL)) || // E-330 to E-520
-        (id == 0x5330303233ULL) || // E-620
-        (id == 0x5330303239ULL) || // E-450
-        (id == 0x5330303330ULL) || // E-600
-        (id == 0x5330303333ULL))   // E-5
+        ((id >= 0x5330303033ULL) &&
+         (id <= 0x5330303138ULL)) || // E-330 to E-520
+        (id == 0x5330303233ULL) ||   // E-620
+        (id == 0x5330303239ULL) ||   // E-450
+        (id == 0x5330303330ULL) ||   // E-600
+        (id == 0x5330303333ULL))     // E-5
     {
       ilm.CameraMount = LIBRAW_MOUNT_FT;
     }
@@ -80,7 +81,8 @@ void LibRaw::getOlympus_SensorTemperature(unsigned len)
     else if ((temp != -32768) && (temp != 0))
     {
       if (temp > 199)
-        imgdata.makernotes.common.SensorTemperature = 86.474958f - 0.120228f * (float)temp;
+        imgdata.makernotes.common.SensorTemperature =
+            86.474958f - 0.120228f * (float)temp;
       else
         imgdata.makernotes.common.SensorTemperature = (float)temp;
     }
@@ -217,6 +219,20 @@ void LibRaw::parseOlympus_CameraSettings(int base, unsigned tag, unsigned type,
     break;
   case 0x0507:
     imOly.ColorSpace = get2();
+    switch (imOly.ColorSpace)
+    {
+    case 0:
+      imCommon.ColorSpace = LIBRAW_COLORSPACE_sRGB;
+      break;
+    case 1:
+      imCommon.ColorSpace = LIBRAW_COLORSPACE_AdobeRGB;
+      break;
+    case 2:
+      imCommon.ColorSpace = LIBRAW_COLORSPACE_ProPhotoRGB;
+      break;
+    default:
+      imCommon.ColorSpace = LIBRAW_COLORSPACE_Unknown;
+    }
     break;
   case 0x0600:
     imgdata.shootinginfo.DriveMode = imOly.DriveMode[0] = get2();
@@ -411,7 +427,8 @@ void LibRaw::parseOlympus_ImageProcessing(unsigned tag, unsigned type,
           ((OlyID == 0x4434353933ULL) || // TG-5
            (OlyID == 0x4434363033ULL))   // TG-6
       )
-        imgdata.makernotes.common.CameraTemperature += imgdata.makernotes.common.exifAmbientTemperature;
+        imgdata.makernotes.common.CameraTemperature +=
+            imgdata.makernotes.common.exifAmbientTemperature;
     }
   }
 
